@@ -16,4 +16,21 @@ public class TestRepository1 {
     public List<TestDTO> findAll(){
         return sessionTemplate.selectList("test.findAll");
     }
+
+    public TestDTO findOneById(Integer id){
+        return sessionTemplate.selectOne("test.findOneById", id);
+    }
+
+    public Integer insertTest(TestDTO dto){
+        return sessionTemplate.insert("test.insertTest", dto);
+    }
+
+    public Integer updateTest(TestDTO dto)
+    {
+        return sessionTemplate.update("test.updateTest", dto);
+    }
+
+    public Integer deleteTest(Integer id){
+        return sessionTemplate.delete("test.deleteTest", id);
+    }
 }

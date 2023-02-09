@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,21 +25,19 @@ public class TestService {
     }
 
     public TestDTO findOneById(Integer id){
-        Optional<TestDTO> findOneById = db.stream().filter(dto -> Objects.equals(dto.getId(), id)).findFirst();
-        return findOneById.orElse(null);
+        return repository1.findOneById(id);
     }
 
     public TestDTO insertTest(TestDTO dto){
-        int id = db.size() + 1;
-        dto.setId(id);
-        db.add(dto);
+        repository1.insertTest(dto);
         return dto;
     }
 
     public TestDTO updateTest(Integer id, TestDTO dto){
         dto.setId(id);
         try {
-            db.set(id - 1, dto);
+            System.out.println(dto.toString());
+            repository1.updateTest(dto);
         }catch (IndexOutOfBoundsException e){
             return null;
         }
@@ -47,7 +46,7 @@ public class TestService {
 
     public Boolean deleteTest(Integer id) {
         try {
-            db.remove(id - 1);
+            repository1.deleteTest(id);
         }catch (IndexOutOfBoundsException e){
             return false;
         }
@@ -55,10 +54,9 @@ public class TestService {
     }
 
     public boolean initData() {
-        Integer size = db.size();
-        for(int i = size + 1; i <= size + 5; i++){
-            TestDTO dto = new TestDTO(i, "park", 10 * i);
-            db.add(dto);
+        for(int i = 1; i <= 5; i++){
+            TestDTO dto = new TestDTO(null, "park", 10 * i);
+            repository1.insertTest(dto);
         }
         return true;
     }
